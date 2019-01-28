@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--根节点必须是mapper -->
+<!--namespace：对应的接口文件 -->
+
+<mapper namespace="cn.tedu.mybatis.entity.maaper.DepartmentMapper">
+
+	<resultMap id="Department_VO_Map" 
+		type="vo.DepartmentVO">
+		<!-- id节点：配置主键 -->
+		<!-- column：查询结果中的列名 -->
+		<!-- property：以上type属性对应的数据类型中的属性名 -->
+		<id column="did" property="did"/>
+		<!-- result节点：配置普通字段 -->
+		<result column="name" property="name"/>
+		<!-- collection节点：配置List集合类型的属性，用于1对多的查询 -->
+		<!-- ofType：在List里放的是什么类型 -->
+		<collection property="users"
+			ofType="entity.User">
+			<id column="uid" property="id"/>
+			<result column="username" property="username"/>
+			<result column="password" property="password"/>
+			<result column="age" property="age"/>
+			<result column="phone" property="phone"/>
+			<result column="email" property="email"/>
+			<result column="isDelete" property="isDelete"/>
+		</collection>
+	</resultMap>
+
+	<select id="findById" resultMap="Department_VO_Map">
+		select 
+		t_department.id AS did,
+		name,
+		t_user.id AS uid,
+		username,
+		password,
+		age,
+		phone,
+		email,
+		is_delete
+	from 
+		t_department 
+	inner join 
+		t_user 
+	on 
+		t_user.did=t_department.id 
+	where 
+		t_department.id=#{id};
+	</select>
+</mapper>
